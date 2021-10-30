@@ -2,7 +2,7 @@ import requests
 
 
 def collect_repos():
-    resp = requests.get('https://api.github.com/orgs/clean-code-craft-tcq-1/repos')
+    resp = requests.get('https://api.github.com/orgs/clean-code-craft-tcq-2/repos')
     repos = resp.json()
     while 'next' in resp.links.keys():
         resp = requests.get(resp.links['next']['url'])
@@ -12,12 +12,20 @@ def collect_repos():
 
 
 def print_repos(repos, interesting):
-    print('Owner,URL')
+    print('repo,URL,last update,status')
     for repository in repos:
-        reponame = repository['full_name']
+        reponame = repository['name']
         if interesting in reponame:
-            print(repository["html_url"])
+            print(','.join([
+                reponame,
+                repository["html_url"],
+                repository["updated_at"],
+                last_status(repository["url"])
+            ]))
+
+
+def last_status(repo_url):
 
 
 if __name__ == '__main__':
-    print_repos(collect_repos(), 'stream-bms-data')
+    print_repos(collect_repos(), 'sense')
