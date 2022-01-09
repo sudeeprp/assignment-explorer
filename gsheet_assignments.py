@@ -10,7 +10,7 @@ def repo_to_row_content(repo, title_indexes):
 class GsheetAssignments:
   heading_row = 1
   def __init__(self, sheet_title) -> None:
-    gc = pygsheets.authorize(service_file='numo-package-upl-1608544549643-b4aa7d596cad.json')
+    gc = pygsheets.authorize(service_file='symbolic-grail-229104-bd96d8b17794.json')
     print(f'opening {sheet_title}')
     sheetfile = gc.open(sheet_title)
     self.wksheet = sheetfile[0]
@@ -40,11 +40,3 @@ class GsheetAssignments:
   def append_repo(self, repo_props):
     self.wksheet.update_row(self.bottom_row + 1, repo_to_row_content(repo_props, self.title_indexes))
     self.bottom_row += 1
-
-# Usage:
-# g.update_repos(2, [
-#   {'repo': 'r1', 'url': 'u1', 'last update': 'l1'},
-#   {'repo': 'r2', 'url': 'u2', 'last update': 'l2'}
-# ])
-#
-# worksheet.update_value((2,1), 'try')
