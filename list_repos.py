@@ -6,16 +6,16 @@ import json
 def collect_repos(githubapi, orgname):
   repos = []
   for repo in githubapi.get_organization(orgname).get_repos():
-    print(repo.name)
-    print(repo.html_url)
-    print(str(repo.updated_at))
+    print(repo.name, end=' ')
+    print(repo.html_url, end='')
+    print(str(repo.pushed_at))
     repos.append(repo)
   print(f'#Collected a total of {len(repos)} repositories')
   return repos
 
 
 def repo_to_row(r):
-  return {'repo': r.name, 'url': files_url(r.html_url), 'last update': str(r.updated_at)}
+  return {'repo': r.name, 'url': files_url(r.html_url), 'last update': str(r.pushed_at)}
 
 
 def files_url(url):
@@ -29,10 +29,10 @@ def fill_status_in_sheet(repos, interesting, sheet_title):
     found_repo = g.find_repo_row(r.name)
     if found_repo != None:
       row_content = found_repo['row']
-      latest_update_time = str(r.updated_at)
+      latest_update_time = str(r.pushed_at)
       if row_content['status'] == '' or row_content['last update'] < latest_update_time:
         row_content['last update'] = latest_update_time
-        row_content['status'] = last_status(row_content['repo'])
+        row_content['status'] = last_status(r)
         row_content['updated'] = 'x'
         g.update_repos(found_repo['row_num'], [row_content])
       else:
@@ -49,7 +49,17 @@ def last_status(repo):
   # as per https://pygithub.readthedocs.io/en/stable/github_objects/Repository.html#github.Repository.Repository.get_workflow_runs
   runs = repo.get_workflow_runs()
   if runs.totalCount > 0:
-    return runs[0].conclusion
+    run_number = runs[0].run_number
+    conclusion = runs[0].conclusion
+    if conclusion == 'success':
+      i = 1
+      while i < runs.totalCount and runs[i].run_number == run_number:
+        print(f'checking more runs of #{run_number}')
+        if runs[i].conclusion != 'success':
+          conclusion = runs[i].conclusion
+          break
+        i += 1
+    return conclusion
   else:
     print(f'{repo} has no workflow runs')
     return ''
