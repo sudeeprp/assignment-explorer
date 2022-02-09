@@ -22,6 +22,25 @@ def files_url(url):
   return url + '/pull/1/files'
 
 
+def add_lastseen(row_content, repo):
+  row_content['status'] = last_status(repo)
+  commits = repo.get_commits()
+  row_content['commits'] = str(commits.totalCount)
+  row_content['last commit'] = str(commits[0].commit.author.date)
+  pulls = repo.get_pulls()
+  print(f'{repo.name} has {pulls.totalCount} pulls')
+  if pulls.totalCount > 0:
+    pull1reviews = repo.get_pull(pulls.totalCount).get_reviews()
+    row_content['last review'] = ''
+    if pull1reviews.totalCount > 0:
+      latest_review = pull1reviews[pull1reviews.totalCount - 1]
+      row_content['last review'] = str(latest_review.submitted_at)
+      row_content['reviewed by'] = str(latest_review.user.login)
+    if row_content['last commit'] > row_content['last review']:
+      row_content['pending review'] = 'yes'
+    row_content['updated'] = 'yes'
+
+
 def fill_status_in_sheet(repos, interesting, sheet_title):
   g = GsheetAssignments(sheet_title)
   interesting_repos = [repo for repo in repos if interesting in repo.name]
@@ -32,15 +51,13 @@ def fill_status_in_sheet(repos, interesting, sheet_title):
       latest_update_time = str(r.pushed_at)
       if row_content['status'] == '' or row_content['last update'] < latest_update_time:
         row_content['last update'] = latest_update_time
-        row_content['status'] = last_status(r)
-        row_content['updated'] = 'x'
+        add_lastseen(row_content, r)
         g.update_repos(found_repo['row_num'], [row_content])
       else:
         print(f'{r.name} already updated for {latest_update_time}')
     else:
       row_content = repo_to_row(r)
-      row_content['status'] = last_status(r)
-      row_content['updated'] = 'x'
+      add_lastseen(row_content, r)
       g.append_repo(row_content)
       print(f'{r.name} added in sheet')
 
@@ -72,7 +89,7 @@ if __name__ == '__main__':
 
   org = 'clean-code-craft-tcq-2'
   interest = 'well-named'
-  title = 'tcq2-well-named-assignment'
+  title = 'tcq2-well-named-assignment-reviews'
 
   repos = collect_repos(githubapi, org)
   fill_status_in_sheet(repos, interest, title)
