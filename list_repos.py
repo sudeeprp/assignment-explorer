@@ -1,7 +1,13 @@
-import requests
 from gsheet_assignments import GsheetAssignments
 from github import Github
 import json
+from buildlogs import coverage
+
+
+org = 'clean-code-craft-tcq-2'
+interest = 'coverage'
+title = 'tcq2-coverage-assessment'
+
 
 def collect_repos(githubapi, orgname):
   repos = []
@@ -39,6 +45,11 @@ def add_lastseen(row_content, repo):
     if row_content['last commit'] > row_content['last review']:
       row_content['pending review'] = 'yes'
     row_content['updated'] = 'yes'
+    print(f'coverage for {org}, {repo.name}:')
+    cov = coverage(org, repo.name)
+    print(cov)
+    row_content['lines'] = cov['linecov']
+    row_content['branches'] = cov['branchcov']
 
 
 def fill_status_in_sheet(repos, interesting, sheet_title):
@@ -87,10 +98,12 @@ if __name__ == '__main__':
     tok = json.load(f)
   githubapi = Github(tok['ken'])
 
-  org = 'clean-code-craft-tcq-2'
-  interest = 'well-named'
-  title = 'tcq2-well-named-assignment-reviews'
-
   repos = collect_repos(githubapi, org)
   fill_status_in_sheet(repos, interest, title)
-  
+
+# To get logs of a run:
+# https://api.github.com/repos/clean-code-craft-tcq-1/typewise-alert-c/actions/runs
+# look for the run with "name": "Build and Run"
+# https://api.github.com/repos/clean-code-craft-tcq-1/typewise-alert-c/actions/runs/1859022428
+# https://api.github.com/repos/clean-code-craft-tcq-1/typewise-alert-c/actions/runs/1859022428/logs
+# See https://docs.github.com/en/rest/reference/actions#download-workflow-run-logs

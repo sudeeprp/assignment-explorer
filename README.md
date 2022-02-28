@@ -12,7 +12,7 @@ pip install -r requirements.txt
 
 Create a Google Sheet in your Google Drive with column headings in the first sheet. The column headings are:
 
-repo,url,last update,status,commits,updated,pending review,reviewer,last commit,last review,reviewed by
+repo,url,status,lines,branches,pending review,reviewer,last update,last commit,last review,reviewed by,commits,updated
 
 Remember the title of this Google Sheet. This is where the submissions summary will arrive.
 
