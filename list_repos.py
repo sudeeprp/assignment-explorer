@@ -1,12 +1,25 @@
+from code import interact
 from gsheet_assignments import GsheetAssignments
 from github import Github
 import json
 from buildlogs import coverage
 
+# org = 'clean-code-craft-tcq-3'
+# interest = 'spring'
+# title = 'tcq3-spring-assessment'
 
 org = 'clean-code-craft-tcq-2'
-interest = 'coverage'
-title = 'tcq2-coverage-assessment'
+interest = 'tdd-buckets'
+title = 'tcq2-tdd-buckets-assessment'
+# interest = 'coverage'
+# title = 'tcq2-coverage-assessment'
+# interest = 'simple-monitor'
+# title = 'tcq2-simple-monitor-assignment-reviews'
+# interest = 'test-failer'
+# title = 'tcq2-test-failer-assignment-reviews'
+# interest = 'well-named'
+# title = 'tcq2-well-named-assignment-reviews'
+
 
 
 def collect_repos(githubapi, orgname):
@@ -45,11 +58,7 @@ def add_lastseen(row_content, repo):
     if row_content['last commit'] > row_content['last review']:
       row_content['pending review'] = 'yes'
     row_content['updated'] = 'yes'
-    print(f'coverage for {org}, {repo.name}:')
-    cov = coverage(org, repo.name)
-    print(cov)
-    row_content['lines'] = cov['linecov']
-    row_content['branches'] = cov['branchcov']
+    row_content['coverage'] = coverage(org, repo.name, tok['ken'])
 
 
 def fill_status_in_sheet(repos, interesting, sheet_title):
