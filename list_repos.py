@@ -4,13 +4,19 @@ from github import Github
 import json
 from buildlogs import coverage
 
+# org = 'clean-coder-lead-1'
+# interest = 'summerent'
+# title = 'clean-coder-lead-1-entrance' 
+
 # org = 'clean-code-craft-tcq-3'
 # interest = 'spring'
 # title = 'tcq3-spring-assessment'
 
 org = 'clean-code-craft-tcq-2'
-interest = 'tdd-buckets'
-title = 'tcq2-tdd-buckets-assessment'
+interest = 'stream-line'
+title = 'tcq2-stream-line'
+# interest = 'tdd-buckets'
+# title = 'tcq2-tdd-buckets-assessment'
 # interest = 'coverage'
 # title = 'tcq2-coverage-assessment'
 # interest = 'simple-monitor'

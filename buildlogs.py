@@ -29,31 +29,27 @@ def extract_first(list, key=None, substr=None):
   return filtered[0]
 
 
-def cov_percent_cxx(log, prefix):
+def cov_percent(log, prefixes):
   loglines = log.decode('utf-8').split('\n')
-  linecov = [l for l in loglines if prefix in l]
+  linecov = [l for l in loglines if any(p in l for p in prefixes)]
+  print(f'linecov: {linecov}')
   if len(linecov) == 0:
-    raise ExtractException(f'{prefix} not found')
-  return re.search('([0-9.]+)%', linecov[0]).group(1)
-
-
-def cov_percent_py(runlog):
-  loglines = runlog.decode('utf-8').split('\n')
-  linecov = [l for l in loglines if 'TOTAL' in l]
-  if len(linecov) == 0:
-    raise ExtractException(f'TOTAL not found')
+    print(f'{prefixes} not found')
+    return ''
   return re.search('([0-9.]+)%', linecov[0]).group(1)
 
 
 def extract_coverage(jobid, org, repo_name):
-  runlog = subprocess.check_output(f"gh run view --job {jobid} --repo {org}/{repo_name} --log")
-  if 'in-c-' in repo_name or 'in-cpp' in repo_name:
-    linecov = float(cov_percent_cxx(runlog, 'lines:'))
-    branchcov = float(cov_percent_cxx(runlog, 'branches:'))
-    print(f'{linecov}% line, {branchcov}% branch --> but considering only LINE coverage for c and cpp')
-    return linecov
-  else:
-    return float(cov_percent_py(runlog))
+  try:
+    runlog = subprocess.check_output(f"gh run view --job {jobid} --repo {org}/{repo_name} --log")
+    cov = cov_percent(runlog, ['lines:', 'TOTAL'])
+    if cov == '':
+      return cov
+    else:
+      return float(cov)
+  except subprocess.CalledProcessError as e:
+    print(f'error extracting logs for {repo_name}')
+    return 'err'
 
 
 def coverage(org, repo_name, token):
@@ -88,3 +84,5 @@ if __name__ == '__main__':
     tok = json.load(f)
   print(coverage('clean-code-craft-tcq-2', 'coverage-in-cpp-JuanAvelar', tok['ken']))
   print(coverage('clean-code-craft-tcq-2', 'coverage-in-py-Venkatesha-Iyengar', tok['ken']))
+  print(coverage('clean-code-craft-tcq-2', 'tdd-buckets-SuchithaNM', tok['ken']))
+  print(coverage('clean-code-craft-tcq-2', 'tdd-buckets-vaishnavi-nayak-sujir', tok['ken']))
