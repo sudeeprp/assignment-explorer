@@ -1,4 +1,5 @@
 import pygsheets
+import pandas as pd
 
 def repo_to_row_content(repo, title_indexes):
   row_content = [''] * len(title_indexes)
@@ -40,3 +41,6 @@ class GsheetAssignments:
   def append_repo(self, repo_props):
     self.wksheet.update_row(self.bottom_row + 1, repo_to_row_content(repo_props, self.title_indexes))
     self.bottom_row += 1
+
+  def column_content(self, headings_map):
+    return pd.DataFrame(self.opened_data, columns=headings_map).rename(columns=headings_map)
