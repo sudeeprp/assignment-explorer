@@ -20,5 +20,4 @@ jobs:
 
     steps:
     - name: Send greeting
-      run: echo "${{ github.event.inputs.environment }} ${{ github.event.inputs.summarize }} ${{ github.event.inputs.choice }}
-  
+      run: echo "${{ github.event.inputs.summarize }} ${{ github.event.inputs.choice }}"
