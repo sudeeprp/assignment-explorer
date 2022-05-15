@@ -1,8 +1,12 @@
-from code import interact
 from gsheet_assignments import GsheetAssignments
 from github import Github
 import json
 from buildlogs import coverage
+from sys import argv
+
+org = 'clean-s-1'
+interest = 'spring'
+title = 'clean-s-1-entrance'
 
 # org = 'clean-coder-lead-1'
 # interest = 'summerent'
@@ -11,12 +15,18 @@ from buildlogs import coverage
 # org = 'clean-code-craft-tcq-3'
 # interest = 'spring'
 # title = 'tcq3-spring-assessment'
+# interest = 'well-named'
+# title = 'tcq3-well-named-assignment'
+# interest = 'test-failer'
+# title = 'tcq3-test-failer-assignment'
+# interest = 'simple-monitor'
+# title = 'tcq3-simple-monitor-assignment-reviews'
 
-org = 'clean-code-craft-tcq-2'
+# org = 'clean-code-craft-tcq-2'
 # interest = 'stream-line'
 # title = 'tcq2-stream-line'
-interest = 'tdd-buckets'
-title = 'tcq2-tdd-buckets-assessment'
+# interest = 'tdd-buckets'
+# title = 'tcq2-tdd-buckets-assessment'
 # interest = 'coverage'
 # title = 'tcq2-coverage-assessment'
 # interest = 'simple-monitor'
@@ -64,7 +74,10 @@ def add_lastseen(row_content, repo):
     if row_content['last commit'] > row_content['last review']:
       row_content['pending review'] = 'yes'
     row_content['updated'] = 'yes'
-    row_content['coverage'] = coverage(org, repo.name, tok['ken'])
+    if len(argv) > 1 and argv[1] == '--coverage':
+      row_content['coverage'] = coverage(org, repo.name, tok['ken'])
+    else:
+      row_content['coverage'] = 'not computed'
 
 
 def fill_status_in_sheet(repos, interesting, sheet_title):

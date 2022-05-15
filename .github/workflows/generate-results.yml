@@ -1,0 +1,27 @@
+name: results
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        description: Select the environment
+      summarize:
+        type: boolean
+        description: True or False
+      choice:
+        type: choice
+        description: Make a choice
+        options:
+        - tcq2
+        - tcq3
+        - clean-s-1
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Send greeting
+      run: echo "${{ github.event.inputs.environment }} ${{ github.event.inputs.summarize }} ${{ github.event.inputs.choice }}
+  
