@@ -5,22 +5,34 @@ from buildlogs import coverage
 from sys import argv
 
 org = 'clean-s-1'
-interest = 'spring'
-title = 'clean-s-1-entrance'
+interest = 'test-failer'
+title = 'clean-s-1-test-failer-assignment'
+# interest = 'well-named'
+# title = 'clean-s-1-well-named-assignment'
+# interest = 'spring'
+# title = 'clean-s-1-entrance'
 
 # org = 'clean-coder-lead-1'
 # interest = 'summerent'
 # title = 'clean-coder-lead-1-entrance' 
 
-# org = 'clean-code-craft-tcq-3'
+# org = 'clean-code-craft-tcq-4'
 # interest = 'spring'
-# title = 'tcq3-spring-assessment'
-# interest = 'well-named'
-# title = 'tcq3-well-named-assignment'
-# interest = 'test-failer'
-# title = 'tcq3-test-failer-assignment'
+# title = 'tcq4-spring-assessment'
+
+# org = 'clean-code-craft-tcq-3'
+# interest = 'tdd-buckets'
+# title = 'tcq3-tdd-buckets-assessment'
+# interest = 'coverage'
+# title = 'tcq3-coverage-assessment'
 # interest = 'simple-monitor'
 # title = 'tcq3-simple-monitor-assignment-reviews'
+# interest = 'test-failer'
+# title = 'tcq3-test-failer-assignment'
+# interest = 'well-named'
+# title = 'tcq3-well-named-assignment'
+# interest = 'spring'
+# title = 'tcq3-spring-assessment'
 
 # org = 'clean-code-craft-tcq-2'
 # interest = 'stream-line'
@@ -103,7 +115,10 @@ def fill_status_in_sheet(repos, interesting, sheet_title):
 
 def last_status(repo):
   # as per https://pygithub.readthedocs.io/en/stable/github_objects/Repository.html#github.Repository.Repository.get_workflow_runs
-  runs = repo.get_workflow_runs()
+  try:
+    runs = repo.get_workflow_runs()
+  except:
+    return 'error'
   if runs.totalCount > 0:
     run_number = runs[0].run_number
     conclusion = runs[0].conclusion

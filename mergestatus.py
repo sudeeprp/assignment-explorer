@@ -22,22 +22,22 @@ class Interest:
 
 
 if __name__ == '__main__':
-    # batch = 'tcq2'
-    # evaluations = [
-    #     {'interest': 'well-named', 'sheetname': f'{batch}-well-named-assignment-reviews', 'morecols': {}},
-    #     {'interest': 'test-failer', 'sheetname': f'{batch}-test-failer-assignment-reviews', 'morecols': {}},
-    #     {'interest': 'simple-monitor', 'sheetname': f'{batch}-simple-monitor-assignment-reviews', 'morecols': {}},
-    #     {'interest': 'coverage', 'sheetname': f'{batch}-coverage-assessment', 'morecols': {
-    #         'coverage': 'assessment-coverage',
-    #         'tests=spec': 'assessment-readability',
-    #         'strong asserts': 'assessment-tests'
-    #     }},
-    #     {'interest': 'tdd-buckets', 'sheetname': f'{batch}-tdd-buckets-assessment', 'morecols': {}},
-    # ]
-    batch = 'clean-s-1'
+    batch = 'tcq2'
     evaluations = [
-        {'interest': 'spring', 'sheetname': f'{batch}-entrance', 'morecols': {}},
+        {'interest': 'well-named', 'sheetname': f'{batch}-well-named-assignment-reviews', 'morecols': {}},
+        {'interest': 'test-failer', 'sheetname': f'{batch}-test-failer-assignment-reviews', 'morecols': {}},
+        {'interest': 'simple-monitor', 'sheetname': f'{batch}-simple-monitor-assignment-reviews', 'morecols': {}},
+        {'interest': 'coverage', 'sheetname': f'{batch}-coverage-assessment', 'morecols': {
+            'coverage': 'assessment-coverage',
+            'tests=spec': 'assessment-readability',
+            'strong asserts': 'assessment-tests'
+        }},
+        {'interest': 'tdd-buckets', 'sheetname': f'{batch}-tdd-buckets-assessment', 'morecols': {}},
     ]
+    # batch = 'clean-s-1'
+    # evaluations = [
+    #     {'interest': 'spring', 'sheetname': f'{batch}-entrance', 'morecols': {}},
+    # ]
 
     summary = None
     for eval in evaluations:
