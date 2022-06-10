@@ -1,6 +1,6 @@
 # Assignment Explorer
 
-Summarizes Assignment submission along with build / workflow-run status.
+Summarizes [Assignment submissions](running-batches.md) along with build / workflow-run status.
 
 ## Pre-requisites
 
