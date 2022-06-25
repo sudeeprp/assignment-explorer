@@ -3,52 +3,12 @@ from github import Github
 import json
 from buildlogs import coverage
 from sys import argv
+import argparse
 
-org = 'clean-s-1'
-interest = 'test-failer'
-title = 'clean-s-1-test-failer-assignment'
-# interest = 'well-named'
-# title = 'clean-s-1-well-named-assignment'
-# interest = 'spring'
-# title = 'clean-s-1-entrance'
-
-# org = 'clean-coder-lead-1'
-# interest = 'summerent'
-# title = 'clean-coder-lead-1-entrance' 
-
-# org = 'clean-code-craft-tcq-4'
-# interest = 'spring'
-# title = 'tcq4-spring-assessment'
-
-# org = 'clean-code-craft-tcq-3'
-# interest = 'tdd-buckets'
-# title = 'tcq3-tdd-buckets-assessment'
-# interest = 'coverage'
-# title = 'tcq3-coverage-assessment'
-# interest = 'simple-monitor'
-# title = 'tcq3-simple-monitor-assignment-reviews'
-# interest = 'test-failer'
-# title = 'tcq3-test-failer-assignment'
-# interest = 'well-named'
-# title = 'tcq3-well-named-assignment'
-# interest = 'spring'
-# title = 'tcq3-spring-assessment'
-
-# org = 'clean-code-craft-tcq-2'
-# interest = 'stream-line'
-# title = 'tcq2-stream-line'
-# interest = 'tdd-buckets'
-# title = 'tcq2-tdd-buckets-assessment'
-# interest = 'coverage'
-# title = 'tcq2-coverage-assessment'
-# interest = 'simple-monitor'
-# title = 'tcq2-simple-monitor-assignment-reviews'
-# interest = 'test-failer'
-# title = 'tcq2-test-failer-assignment-reviews'
-# interest = 'well-named'
-# title = 'tcq2-well-named-assignment-reviews'
-
-
+org = ''
+interest = ''
+title = ''
+fetch_coverage = False
 
 def collect_repos(githubapi, orgname):
   repos = []
@@ -86,7 +46,7 @@ def add_lastseen(row_content, repo):
     if row_content['last commit'] > row_content['last review']:
       row_content['pending review'] = 'yes'
     row_content['updated'] = 'yes'
-    if len(argv) > 1 and argv[1] == '--coverage':
+    if fetch_coverage == True:
       row_content['coverage'] = coverage(org, repo.name, tok['ken'])
     else:
       row_content['coverage'] = 'not computed'
@@ -137,6 +97,18 @@ def last_status(repo):
 
 
 if __name__ == '__main__':
+  parser = argparse.ArgumentParser(description='Explore assignment submissions')
+  parser.add_argument('--org', required=True, help='GitHub organization used for submission')
+  parser.add_argument('--interest', required=True, help='assignment name prefix')
+  parser.add_argument('--title', required=True, help='name of Google Sheet')
+  parser.add_argument('--coverage', dest='coverage', action='store_const', const=True, default=False, help='Collect coverage')
+
+  args = parser.parse_args()
+  org = args.org
+  interest = args.interest
+  title = args.title
+  fetch_coverage = args.coverage
+
   with open('github.json') as f:
     tok = json.load(f)
   githubapi = Github(tok['ken'])

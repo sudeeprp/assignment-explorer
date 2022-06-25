@@ -3,16 +3,33 @@ name: results
 on:
   workflow_dispatch:
     inputs:
-      summarize:
-        type: boolean
-        description: True or False
-      choice:
+      org:
         type: choice
-        description: Make a choice
+        description: Organization
         options:
-        - tcq2
         - tcq3
         - clean-s-1
+        - tcq4
+      assignment:
+        type: choice
+        description: Assignment name
+        options:
+        - well-named
+        - test-failer
+        - simple-monitor
+        - coverage
+        - tdd-buckets
+        - stream-line
+      title:
+        type: choice
+        description: Title suffix of Google Sheet
+        options:
+        - assignment
+        - assessment
+        - extension
+      coverage:
+        type: boolean
+        description: Collect coverage
 
 jobs:
   greet:
@@ -20,4 +37,4 @@ jobs:
 
     steps:
     - name: Send greeting
-      run: echo "${{ github.event.inputs.summarize }} ${{ github.event.inputs.choice }}"
+      run: echo "--org ${{ github.event.inputs.org }} --interest ${{ github.event.inputs.assignment }} --title ${{ github.event.inputs.org }}-${{ github.event.inputs.org }}-${{ github.event.inputs.title }} --coverage {{ github.inputs.coverage }}"
