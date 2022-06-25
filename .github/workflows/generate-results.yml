@@ -37,4 +37,4 @@ jobs:
 
     steps:
     - name: Send greeting
-      run: echo "--org ${{ github.event.inputs.org }} --interest ${{ github.event.inputs.assignment }} --title ${{ github.event.inputs.org }}-${{ github.event.inputs.org }}-${{ github.event.inputs.title }} --coverage {{ github.inputs.coverage }}"
+      run: echo "--org ${{ github.event.inputs.org }} --interest ${{ github.event.inputs.assignment }} --title ${{ github.event.inputs.org }}-${{ github.event.inputs.org }}-${{ github.event.inputs.title }} {{ fromJSON('["", "--coverage"]')[github.event.inputs.coverage == 'true'] }}"
