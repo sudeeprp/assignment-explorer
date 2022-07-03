@@ -7,9 +7,9 @@ on:
         type: choice
         description: Batch
         options:
-        - tcq3
+        - tcq-3
         - clean-s-1
-        - tcq4
+        - tcq-4
       assignment:
         type: choice
         description: Assignment name
