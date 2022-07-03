@@ -11,7 +11,7 @@ def repo_to_row_content(repo, title_indexes):
 class GsheetAssignments:
   heading_row = 1
   def __init__(self, sheet_title) -> None:
-    gc = pygsheets.authorize(service_file='symbolic-grail-229104-bd96d8b17794.json')
+    gc = pygsheets.authorize(service_account_env_var='GOOGLE_SERVICE_ACCOUNT_CREDENTIALS')
     print(f'opening {sheet_title}')
     sheetfile = gc.open(sheet_title)
     self.wksheet = sheetfile[0]

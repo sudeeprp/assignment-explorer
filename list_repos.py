@@ -1,13 +1,10 @@
 from gsheet_assignments import GsheetAssignments
 from github import Github
-import json
 from buildlogs import coverage
 from sys import argv
 import argparse
+import os
 
-org = ''
-interest = ''
-title = ''
 fetch_coverage = False
 
 def collect_repos(githubapi, orgname):
@@ -29,7 +26,7 @@ def files_url(url):
   return url + '/pull/1/files'
 
 
-def add_lastseen(row_content, repo):
+def add_lastseen(row_content, org, repo):
   row_content['status'] = last_status(repo)
   commits = repo.get_commits()
   row_content['commits'] = str(commits.totalCount)
@@ -52,7 +49,7 @@ def add_lastseen(row_content, repo):
       row_content['coverage'] = 'not computed'
 
 
-def fill_status_in_sheet(repos, interesting, sheet_title):
+def fill_status_in_sheet(org, repos, interesting, sheet_title):
   g = GsheetAssignments(sheet_title)
   interesting_repos = [repo for repo in repos if interesting in repo.name]
   for r in interesting_repos:
@@ -62,13 +59,13 @@ def fill_status_in_sheet(repos, interesting, sheet_title):
       latest_update_time = str(r.pushed_at)
       if row_content['status'] == '' or row_content['last update'] < latest_update_time:
         row_content['last update'] = latest_update_time
-        add_lastseen(row_content, r)
+        add_lastseen(row_content, org, r)
         g.update_repos(found_repo['row_num'], [row_content])
       else:
         print(f'{r.name} already updated for {latest_update_time}')
     else:
       row_content = repo_to_row(r)
-      add_lastseen(row_content, r)
+      add_lastseen(row_content, org, r)
       g.append_repo(row_content)
       print(f'{r.name} added in sheet')
 
@@ -96,25 +93,30 @@ def last_status(repo):
     return ''
 
 
+def github_to_sheet(batch, interest, coverage):
+  batch_to_org = {
+    'tcq-3': 'clean-code-craft-tcq-3',
+    'tcq-4': 'clean-code-craft-tcq-4',
+    'clean-s-1': 'clean-s-1'
+  }
+  fetch_coverage = coverage
+
+  githubapi = Github(os.environ['GITHUBAPI_TOKEN'])
+  org = batch_to_org[batch]
+  title = f'{batch}-{interest}'
+  repos = collect_repos(githubapi, org)
+  fill_status_in_sheet(org, repos, interest, title)
+
+
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description='Explore assignment submissions')
-  parser.add_argument('--org', required=True, help='GitHub organization used for submission')
+  parser.add_argument('--batch', required=True, help='name of batch')
   parser.add_argument('--interest', required=True, help='assignment name prefix')
-  parser.add_argument('--title', required=True, help='name of Google Sheet')
   parser.add_argument('--coverage', dest='coverage', action='store_const', const=True, default=False, help='Collect coverage')
 
   args = parser.parse_args()
-  org = args.org
-  interest = args.interest
-  title = args.title
-  fetch_coverage = args.coverage
+  github_to_sheet(args.batch, args.interest, args.coverage)
 
-  with open('github.json') as f:
-    tok = json.load(f)
-  githubapi = Github(tok['ken'])
-
-  repos = collect_repos(githubapi, org)
-  fill_status_in_sheet(repos, interest, title)
 
 # To get logs of a run:
 # https://api.github.com/repos/clean-code-craft-tcq-1/typewise-alert-c/actions/runs

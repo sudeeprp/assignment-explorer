@@ -3,9 +3,9 @@ name: results
 on:
   workflow_dispatch:
     inputs:
-      org:
+      batch:
         type: choice
-        description: Organization
+        description: Batch
         options:
         - tcq3
         - clean-s-1
@@ -20,13 +20,6 @@ on:
         - coverage
         - tdd-buckets
         - stream-line
-      title:
-        type: choice
-        description: Title suffix of Google Sheet
-        options:
-        - assignment
-        - assessment
-        - extension
       coverage:
         type: boolean
         description: Collect coverage
@@ -52,4 +45,4 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
     - name: Run
       run: |
-        python list_repos.py --org ${{ github.event.inputs.org }} --interest ${{ github.event.inputs.assignment }} --title ${{ github.event.inputs.org }}-${{ github.event.inputs.assignment }}-${{ github.event.inputs.title }} ${{ fromJSON('["", "--coverage"]')[github.event.inputs.coverage == 'true'] }}
+        python list_repos.py --batch ${{ github.event.inputs.batch }} --interest ${{ github.event.inputs.assignment }} ${{ fromJSON('["", "--coverage"]')[github.event.inputs.coverage == 'true'] }}
