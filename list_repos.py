@@ -44,7 +44,7 @@ def add_lastseen(row_content, org, repo):
       row_content['pending review'] = 'yes'
     row_content['updated'] = 'yes'
     if fetch_coverage == True:
-      row_content['coverage'] = coverage(org, repo.name, tok['ken'])
+      row_content['coverage'] = coverage(org, repo.name, os.environ['GITHUBAPI_TOKEN'])
     else:
       row_content['coverage'] = 'not computed'
 
