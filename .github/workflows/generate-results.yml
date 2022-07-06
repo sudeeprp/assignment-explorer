@@ -1,4 +1,4 @@
-name: results
+name: Submission results
 
 on:
   workflow_dispatch:
@@ -25,7 +25,7 @@ on:
         description: Collect coverage
 
 jobs:
-  greet:
+  Welcome all submissions:
     runs-on: ubuntu-latest
 
     steps:
