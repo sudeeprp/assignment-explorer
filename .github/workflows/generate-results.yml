@@ -26,6 +26,7 @@ on:
 
 jobs:
   Welcome-all-submissions:
+    name: Submissions of ${{ github.event.inputs.batch }} ${{ github.event.inputs.assignment }}
     runs-on: ubuntu-latest
 
     steps:

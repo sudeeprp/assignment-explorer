@@ -5,7 +5,6 @@ from sys import argv
 import argparse
 import os
 
-fetch_coverage = False
 
 def collect_repos(githubapi, orgname):
   repos = []
@@ -26,7 +25,7 @@ def files_url(url):
   return url + '/pull/1/files'
 
 
-def add_lastseen(row_content, org, repo):
+def add_lastseen(row_content, org, repo, fetch_coverage):
   row_content['status'] = last_status(repo)
   commits = repo.get_commits()
   row_content['commits'] = str(commits.totalCount)
@@ -49,7 +48,7 @@ def add_lastseen(row_content, org, repo):
       row_content['coverage'] = 'not computed'
 
 
-def fill_status_in_sheet(org, repos, interesting, sheet_title):
+def fill_status_in_sheet(org, repos, interesting, sheet_title, fetch_coverage):
   g = GsheetAssignments(sheet_title)
   interesting_repos = [repo for repo in repos if interesting in repo.name]
   for r in interesting_repos:
@@ -59,13 +58,13 @@ def fill_status_in_sheet(org, repos, interesting, sheet_title):
       latest_update_time = str(r.pushed_at)
       if row_content['status'] == '' or row_content['last update'] < latest_update_time:
         row_content['last update'] = latest_update_time
-        add_lastseen(row_content, org, r)
+        add_lastseen(row_content, org, r, fetch_coverage)
         g.update_repos(found_repo['row_num'], [row_content])
       else:
         print(f'{r.name} already updated for {latest_update_time}')
     else:
       row_content = repo_to_row(r)
-      add_lastseen(row_content, org, r)
+      add_lastseen(row_content, org, r, fetch_coverage)
       g.append_repo(row_content)
       print(f'{r.name} added in sheet')
 
@@ -99,13 +98,12 @@ def github_to_sheet(batch, interest, coverage):
     'tcq-4': 'clean-code-craft-tcq-4',
     'clean-s-1': 'clean-s-1'
   }
-  fetch_coverage = coverage
 
   githubapi = Github(os.environ['GITHUBAPI_TOKEN'])
   org = batch_to_org[batch]
   title = f'{batch}-{interest}'
   repos = collect_repos(githubapi, org)
-  fill_status_in_sheet(org, repos, interest, title)
+  fill_status_in_sheet(org, repos, interest, title, coverage)
 
 
 if __name__ == '__main__':
