@@ -3,7 +3,8 @@ import json
 import os
 
 batch = 'clean-s-1'
-interest = 'simple-monitor'
+interest = 'coverage'
+# interest = 'simple-monitor'
 # title = 'clean-s-1-simple-monitor-assignment'
 # interest = 'test-failer'
 # title = 'clean-s-1-test-failer-assignment'
@@ -62,4 +63,4 @@ with open('symbolic-grail-229104-bd96d8b17794.json') as drivecredfile:
     drivecred = drivecredfile.read()
     os.environ['GOOGLE_SERVICE_ACCOUNT_CREDENTIALS'] = drivecred
 
-github_to_sheet(batch, interest, False)
+github_to_sheet(batch, interest, coverage=True)

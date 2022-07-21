@@ -42,10 +42,11 @@ def add_lastseen(row_content, org, repo, fetch_coverage):
     if row_content['last commit'] > row_content['last review']:
       row_content['pending review'] = 'yes'
     row_content['updated'] = 'yes'
+    line_coverage = None
     if fetch_coverage == True:
-      row_content['coverage'] = coverage(org, repo.name, os.environ['GITHUBAPI_TOKEN'])
-    else:
-      row_content['coverage'] = 'not computed'
+      line_coverage = coverage(org, repo.name, os.environ['GITHUBAPI_TOKEN'])
+    if line_coverage != None:
+      row_content['coverage'] = line_coverage
 
 
 def fill_status_in_sheet(org, repos, interesting, sheet_title, fetch_coverage):
