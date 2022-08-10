@@ -2,8 +2,11 @@ from list_repos import github_to_sheet
 import json
 import os
 
-batch = 'clean-s-1'
-interest = 'coverage'
+batch = 'tcq-m-2'
+interest = 'spring'
+
+# batch = 'clean-s-1'
+# interest = 'coverage'
 # interest = 'simple-monitor'
 # title = 'clean-s-1-simple-monitor-assignment'
 # interest = 'test-failer'
@@ -14,6 +17,7 @@ interest = 'coverage'
 # title = 'clean-s-1-entrance'
 
 # batch = 'tcq-4'
+# interest = 'coverage'
 # interest = 'test-failer'
 # title = 'tcq4-test-failer-assignment'
 # interest = 'well-named'
@@ -63,4 +67,4 @@ with open('symbolic-grail-229104-bd96d8b17794.json') as drivecredfile:
     drivecred = drivecredfile.read()
     os.environ['GOOGLE_SERVICE_ACCOUNT_CREDENTIALS'] = drivecred
 
-github_to_sheet(batch, interest, coverage=True)
+github_to_sheet(batch, interest, coverage=False)

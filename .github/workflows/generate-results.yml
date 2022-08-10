@@ -10,6 +10,7 @@ on:
         - tcq-3
         - clean-s-1
         - tcq-4
+        - tcq-m-2
       assignment:
         type: choice
         description: Assignment name
