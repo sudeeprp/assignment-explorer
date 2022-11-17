@@ -2,3 +2,5 @@ sheeta.json
 __pycache__
 symbolic-grail-229104-bd96d8b17794.json
 github.json
+*.csv
+*.xlsx

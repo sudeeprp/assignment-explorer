@@ -10,7 +10,7 @@ class Interest:
         self.sheetname = sheetname
 
     def reponame2user(self, repo_name):
-        lang_prefixes = ['in-c-', 'in-cpp-', 'in-cs-', 'in-java-', 'in-py-']
+        lang_prefixes = ['in-c-', 'in-cpp-', 'in-cs-', 'in-java-', 'in-py-', 'in-js-']
         repo_name = repo_name.replace(f'{self.interest}-', '')
         for prefix in lang_prefixes:
             repo_name = repo_name.replace(prefix, '')
@@ -28,28 +28,36 @@ if __name__ == '__main__':
         drivecred = drivecredfile.read()
         os.environ['GOOGLE_SERVICE_ACCOUNT_CREDENTIALS'] = drivecred
 
-    batch = 'tcq-3'
+    batch = 'tcq-4'
     evaluations = [
         {'name': 'Naming', 'interest': 'well-named', 'sheetname': f'{batch}-well-named', 'morecols': {}},
         {'name': 'Proven code', 'interest': 'test-failer', 'sheetname': f'{batch}-test-failer', 'morecols': {}},
-        {'name': 'Simplicity', 'interest': 'simple-monitor', 'sheetname': f'{batch}-simple-monitor-first-reviews', 'morecols': {}},
-        {'name': 'Extend & refactor', 'interest': 'simple-monitor', 'sheetname': f'{batch}-simple-monitor', 'morecols': {}},
+        {'name': 'Simplicity', 'interest': 'simple-monitor', 'sheetname': f'{batch}-simple-monitor', 'morecols': {}},
         {'name': 'Strategy with tests', 'interest': 'coverage', 'sheetname': f'{batch}-coverage', 'morecols': {'coverage': 'Assessment: coverage'}},
-        {'name': 'TDD first step', 'interest': 'tdd-buckets', 'sheetname': f'{batch}-tdd-buckets-first-assessment', 'morecols': {}},
         {'name': 'Extend with TDD', 'interest': 'tdd-buckets', 'sheetname': f'{batch}-tdd-buckets', 'morecols': {}},
         {'name': 'Collaboration project', 'interest': 'stream-line', 'sheetname': f'{batch}-stream-line', 'morecols': {}},
     ]
+    # batch = 'clean-s-1'
+    # evaluations = [
+    #     {'name': 'Naming', 'interest': 'well-named', 'sheetname': f'{batch}-well-named', 'morecols': {}},
+    #     {'name': 'Proven code', 'interest': 'test-failer', 'sheetname': f'{batch}-test-failer', 'morecols': {}},
+    #     {'name': 'Simplicity', 'interest': 'simple-monitor', 'sheetname': f'{batch}-simple-monitor-first-reviews', 'morecols': {}},
+    #     {'name': 'Extend & refactor', 'interest': 'simple-monitor', 'sheetname': f'{batch}-simple-monitor', 'morecols': {}},
+    #     {'name': 'Strategy with tests', 'interest': 'coverage', 'sheetname': f'{batch}-coverage', 'morecols': {'coverage': 'Assessment: coverage'}},
+    #     {'name': 'Extend with TDD', 'interest': 'tdd-buckets', 'sheetname': f'{batch}-tdd-buckets', 'morecols': {}},
+    #     {'name': 'Collaboration project', 'interest': 'stream-line', 'sheetname': f'{batch}-stream-line', 'morecols': {}},
+    # ]
 
     summary = None
     for eval in evaluations:
         interest = Interest(batch, eval['name'], eval['interest'], eval['sheetname'])
         results = interest.load(eval['morecols'])
-        results['user'] = results['user'].apply(interest.reponame2user)
+        results['User'] = results['User'].apply(interest.reponame2user)
         print(f"Done: {eval['sheetname']}")
         if summary is None:
             summary = results
         else:
-            summary = summary.merge(results, how='outer', on='user')
+            summary = summary.merge(results, how='outer', on='User')
     
     summary.to_csv(f'{batch}-summary.csv')
     print(f"Wrote: {batch}-summary.csv")
