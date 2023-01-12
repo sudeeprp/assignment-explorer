@@ -39,16 +39,16 @@ def cov_percent(log, prefixes):
   return re.search('([0-9.]+)%', linecov[0]).group(1)
 
 
-def extract_coverage(jobid, org, repo_name):
+def extract_coverage(repobase, jobid, token):
   try:
-    runlog = subprocess.check_output(f"gh run view --job {jobid} --repo {org}/{repo_name} --log")
+    runlog = fetch(f'{repobase}/actions/jobs/{jobid}/logs', token)
     cov = cov_percent(runlog, ['lines:', 'TOTAL'])
     if cov == '':
       return cov
     else:
       return float(cov)
   except subprocess.CalledProcessError as e:
-    print(f'error extracting logs for {repo_name}')
+    print(f'error extracting logs for {repobase}')
     return 'err'
 
 
@@ -61,7 +61,7 @@ def coverage(org, repo_name, token):
     joblist = fetch(f"{repobase}/actions/runs/{buildflow['id']}/jobs", token)
     job = extract_first(joblist['jobs'])
     print(f"found job {job['id']}")
-    return extract_coverage(job['id'], org, repo_name)
+    return extract_coverage(repobase, job['id'], token)
   except ExtractException as e:
     print(e)
     return ''
