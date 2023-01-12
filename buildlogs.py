@@ -41,13 +41,14 @@ def cov_percent(log, prefixes):
 
 def extract_coverage(repobase, jobid, token):
   try:
-    runlog = fetch(f'{repobase}/actions/jobs/{jobid}/logs', token)
+    runlog_resp = requests.get(f'{repobase}/actions/jobs/{jobid}/logs', headers={'Authorization': f"token {token}"})
+    runlog = runlog_resp.text
     cov = cov_percent(runlog, ['lines:', 'TOTAL'])
     if cov == '':
       return cov
     else:
       return float(cov)
-  except subprocess.CalledProcessError as e:
+  except:
     print(f'error extracting logs for {repobase}')
     return 'err'
 
