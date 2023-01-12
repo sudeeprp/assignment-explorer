@@ -4,6 +4,7 @@ from github import Github
 import json
 import subprocess
 import re
+import traceback
 
 
 class ExtractException(Exception):
@@ -42,14 +43,16 @@ def cov_percent(log, prefixes):
 def extract_coverage(repobase, jobid, token):
   try:
     runlog_resp = requests.get(f'{repobase}/actions/jobs/{jobid}/logs', headers={'Authorization': f"token {token}"})
+    print(f'runlog resp status {runlog_resp.status_code}')
     runlog = runlog_resp.text
     cov = cov_percent(runlog, ['lines:', 'TOTAL'])
     if cov == '':
       return cov
     else:
       return float(cov)
-  except:
-    print(f'error extracting logs for {repobase}')
+  except Exception as e:
+    print(f'error extracting logs for {repobase}:')
+    print(traceback.format_exc())
     return 'err'
 
 
