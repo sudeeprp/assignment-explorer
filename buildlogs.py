@@ -31,7 +31,7 @@ def extract_first(list, key=None, substr=None):
 
 
 def cov_percent(log, prefixes):
-  loglines = log.decode('utf-8').split('\n')
+  loglines = log.split('\n')
   linecov = [l for l in loglines if any(p in l for p in prefixes)]
   print(f'linecov: {linecov}')
   if len(linecov) == 0:
