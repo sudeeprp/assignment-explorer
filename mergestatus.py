@@ -28,7 +28,7 @@ if __name__ == '__main__':
         drivecred = drivecredfile.read()
         os.environ['GOOGLE_SERVICE_ACCOUNT_CREDENTIALS'] = drivecred
 
-    batch = 'tcq-4'
+    batch = 'tcq-m-2'
     evaluations = [
         {'name': 'Naming', 'interest': 'well-named', 'sheetname': f'{batch}-well-named', 'morecols': {}},
         {'name': 'Proven code', 'interest': 'test-failer', 'sheetname': f'{batch}-test-failer', 'morecols': {}},
@@ -37,16 +37,6 @@ if __name__ == '__main__':
         {'name': 'Extend with TDD', 'interest': 'tdd-buckets', 'sheetname': f'{batch}-tdd-buckets', 'morecols': {}},
         {'name': 'Collaboration project', 'interest': 'stream-line', 'sheetname': f'{batch}-stream-line', 'morecols': {}},
     ]
-    # batch = 'clean-s-1'
-    # evaluations = [
-    #     {'name': 'Naming', 'interest': 'well-named', 'sheetname': f'{batch}-well-named', 'morecols': {}},
-    #     {'name': 'Proven code', 'interest': 'test-failer', 'sheetname': f'{batch}-test-failer', 'morecols': {}},
-    #     {'name': 'Simplicity', 'interest': 'simple-monitor', 'sheetname': f'{batch}-simple-monitor-first-reviews', 'morecols': {}},
-    #     {'name': 'Extend & refactor', 'interest': 'simple-monitor', 'sheetname': f'{batch}-simple-monitor', 'morecols': {}},
-    #     {'name': 'Strategy with tests', 'interest': 'coverage', 'sheetname': f'{batch}-coverage', 'morecols': {'coverage': 'Assessment: coverage'}},
-    #     {'name': 'Extend with TDD', 'interest': 'tdd-buckets', 'sheetname': f'{batch}-tdd-buckets', 'morecols': {}},
-    #     {'name': 'Collaboration project', 'interest': 'stream-line', 'sheetname': f'{batch}-stream-line', 'morecols': {}},
-    # ]
 
     summary = None
     for eval in evaluations:

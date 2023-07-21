@@ -56,6 +56,17 @@ def extract_coverage(repobase, jobid, token):
     return 'err'
 
 
+def coverage_from_artifact(artifacts_url, token):
+  artifact_set = fetch(artifacts_url, token)
+  zip_download_url = artifact_set['artifacts'][0]['archive_download_url']
+  zip_resp = requests.get(zip_download_url, stream=True)
+  with open("cov_artifact.zip", "wb") as f:
+    for chunk in zip_resp.iter_content(chunk_size=1024):
+      if chunk:  # filter out keep-alive new chunks
+        f.write(chunk)
+  print('done writing cov_artifact.zip')
+
+
 def coverage(org, repo_name, token):
   try:
     repobase = f'https://api.github.com/repos/{org}/{repo_name}'
@@ -65,7 +76,10 @@ def coverage(org, repo_name, token):
     joblist = fetch(f"{repobase}/actions/runs/{buildflow['id']}/jobs", token)
     job = extract_first(joblist['jobs'])
     print(f"found job {job['id']}")
-    return extract_coverage(repobase, job['id'], token)
+    cov = extract_coverage(repobase, job['id'], token)
+    if cov == '':
+      cov = coverage_from_artifact(buildflow['artifacts_url'], token)
+    return cov
   except ExtractException as e:
     print(e)
     return ''
@@ -86,7 +100,6 @@ def repocoverage(repo, token):
 if __name__ == '__main__':
   with open('github.json') as f:
     tok = json.load(f)
+
+  print(coverage('clean-code-craft-tcq-7', 'coverage-in-java-KeerthanaKuppuchamy', tok['ken']))
   print(coverage('clean-code-craft-tcq-2', 'coverage-in-cpp-JuanAvelar', tok['ken']))
-  print(coverage('clean-code-craft-tcq-2', 'coverage-in-py-Venkatesha-Iyengar', tok['ken']))
-  print(coverage('clean-code-craft-tcq-2', 'tdd-buckets-SuchithaNM', tok['ken']))
-  print(coverage('clean-code-craft-tcq-2', 'tdd-buckets-vaishnavi-nayak-sujir', tok['ken']))

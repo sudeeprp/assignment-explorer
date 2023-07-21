@@ -7,8 +7,7 @@ on:
         type: choice
         description: Batch
         options:
-        - tcq-m-2
-        - tcq-7
+        - p-1
       assignment:
         type: choice
         description: Assignment name
