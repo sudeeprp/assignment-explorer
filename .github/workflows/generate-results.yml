@@ -12,6 +12,7 @@ on:
         type: choice
         description: Assignment name
         options:
+        - spring
         - well-named
         - test-failer
         - simple-monitor
