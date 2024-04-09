@@ -7,11 +7,12 @@ on:
         type: choice
         description: Batch
         options:
-        - p-1
+        - personal
       assignment:
         type: choice
         description: Assignment name
         options:
+        - pass-an-image
         - spring
         - well-named
         - test-failer
