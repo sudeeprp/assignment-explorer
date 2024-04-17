@@ -12,6 +12,7 @@ on:
         type: choice
         description: Assignment name
         options:
+        - image-encapsulation
         - pass-an-image
         - spring
         - well-named
