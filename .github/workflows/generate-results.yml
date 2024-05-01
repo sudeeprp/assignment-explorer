@@ -12,6 +12,7 @@ on:
         type: choice
         description: Assignment name
         options:
+        - reduce-code
         - brightening-lambda
         - image-encapsulation
         - pass-an-image
