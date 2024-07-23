@@ -33,7 +33,8 @@ if __name__ == '__main__':
         {"name": 'Pass an image', "interest": 'pass-an-image', "sheetname": f'{batch}-pass-an-image', 'morecols': {}},
         {"name": 'Image encapsulation', "interest": 'image-encapsulation', "sheetname": f'{batch}-image-encapsulation', 'morecols': {}},
         {"name": 'Brightening lambda', "interest": 'brightening-lambda', "sheetname": f'{batch}-brightening-lambda', 'morecols': {}},
-        {"name": 'Reduce code', "interest": 'reduce-code', "sheetname": f'{batch}-reduce-code', 'morecols': {}}
+        {"name": 'Reduce code', "interest": 'reduce-code', "sheetname": f'{batch}-reduce-code', 'morecols': {}},
+        {"name": 'Mistake proofing', "interest": 'types-for-mistake-proofing', "sheetname": f'{batch}-types-for-mistake-proofing', 'morecols': {}}
     ]
     # batch = 'p-1'
     # evaluations = [

@@ -7,16 +7,11 @@ on:
         type: choice
         description: Batch
         options:
-        - personal
+        - igt-icc
       assignment:
         type: choice
         description: Assignment name
         options:
-        - types-for-mistake-proofing
-        - reduce-code
-        - brightening-lambda
-        - image-encapsulation
-        - pass-an-image
         - spring
         - well-named
         - test-failer
