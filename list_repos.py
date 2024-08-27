@@ -102,7 +102,8 @@ def github_to_sheet(batch, interest, coverage):
     'tcq-7': 'clean-code-craft-tcq-7',
     'p-1': 'clean-code-craft-p-1',
     'personal': 'clean-code-personal',
-    'igt-icc': 'code-craft-igt-1'
+    'igt-icc': 'code-craft-igt-1',
+    'us-1': 'code-craft-us-1'
   }
 
   githubapi = Github(os.environ['GITHUBAPI_TOKEN'])
