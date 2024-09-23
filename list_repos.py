@@ -75,8 +75,15 @@ def fill_status_in_sheet(org, repos, interesting, sheet_title, fetch_coverage):
 def last_status(repo):
   try:
     latest_commit = repo.get_commits()[0]
-    combined_status = repo.get_commit(latest_commit.sha).get_combined_status()
-    return combined_status.state
+    print(f'latest commit: {latest_commit.sha}')
+    check_runs = repo.get_commit(latest_commit.sha).get_check_runs()
+    run_statuses = []
+    for run in check_runs:
+      run_statuses.append(run.conclusion)
+    combined_status = 'failure' if any(map(lambda x: x == 'failure' or x == 'error', run_statuses)) \
+      else 'pending' if any(map(lambda x: x == 'pending', run_statuses)) \
+      else 'success'
+    return combined_status
   except:
     return 'error'
 
