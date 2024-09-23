@@ -27,6 +27,8 @@ def files_url(url):
 
 def add_lastseen(row_content, org, repo, fetch_coverage):
   row_content['status'] = last_status(repo)
+  if row_content['status'] == 'failure':
+    row_content['status'] = see_attempts_and_mark(repo, row_content['status'])
   commits = repo.get_commits()
   row_content['commits'] = str(commits.totalCount)
   row_content['last commit'] = str(commits[0].commit.author.date)
@@ -71,26 +73,26 @@ def fill_status_in_sheet(org, repos, interesting, sheet_title, fetch_coverage):
 
 
 def last_status(repo):
-  # as per https://pygithub.readthedocs.io/en/stable/github_objects/Repository.html#github.Repository.Repository.get_workflow_runs
   try:
-    runs = repo.get_workflow_runs()
+    latest_commit = repo.get_commits()[0]
+    combined_status = repo.get_commit(latest_commit.sha).get_combined_status()
+    return combined_status.state
   except:
     return 'error'
-  if runs.totalCount > 0:
-    run_number = runs[0].run_number
-    conclusion = runs[0].conclusion
-    if conclusion == 'success':
-      i = 1
-      while i < runs.totalCount and runs[i].run_number == run_number:
-        print(f'checking more runs of #{run_number}')
-        if runs[i].conclusion != 'success':
-          conclusion = runs[i].conclusion
-          break
-        i += 1
-    return conclusion
-  else:
-    print(f'{repo} has no workflow runs')
-    return ''
+
+
+def see_attempts_and_mark(repo, repo_status):
+  status_mark = repo_status
+  if repo.fork:
+    upstream_repo = repo.parent
+    forked_branch = repo.default_branch
+    upstream_branch = upstream_repo.default_branch
+    forked_commit = repo.get_branch(forked_branch).commit.sha
+    upstream_commit = upstream_repo.get_branch(upstream_branch).commit.sha
+    comparison = repo.compare(upstream_commit, forked_commit)
+    if comparison.ahead_by > 0:
+      status_mark = 'attempted'
+  return status_mark
 
 
 def github_to_sheet(batch, interest, coverage):
