@@ -28,12 +28,12 @@ if __name__ == '__main__':
         drivecred = drivecredfile.read()
         os.environ['GOOGLE_SERVICE_ACCOUNT_CREDENTIALS'] = drivecred
 
-    batch = 'p-1'
+    batch = 'igt-icc'
     evaluations = [
         {'name': 'Naming', 'interest': 'well-named', 'sheetname': f'{batch}-well-named', 'morecols': {}},
         {'name': 'Proven code', 'interest': 'test-failer', 'sheetname': f'{batch}-test-failer', 'morecols': {}},
         {'name': 'Simplicity', 'interest': 'simple-monitor', 'sheetname': f'{batch}-simple-monitor', 'morecols': {}},
-        {'name': 'Strategy with tests', 'interest': 'coverage', 'sheetname': f'{batch}-coverage', 'morecols': {'coverage': 'Assessment: coverage'}},
+        # {'name': 'Strategy with tests', 'interest': 'coverage', 'sheetname': f'{batch}-coverage', 'morecols': {'coverage': 'Assessment: coverage'}},
         # {'name': 'Extend with TDD', 'interest': 'tdd-buckets', 'sheetname': f'{batch}-tdd-buckets', 'morecols': {}},
         # {'name': 'Collaboration project', 'interest': 'stream-line', 'sheetname': f'{batch}-stream-line', 'morecols': {}},
     ]

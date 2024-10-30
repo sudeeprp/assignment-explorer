@@ -17,9 +17,8 @@ on:
         - well-named
         - test-failer
         - simple-monitor
-        - coverage
-        - tdd-buckets
         - stream-line
+        - pass-an-image
       coverage:
         type: boolean
         description: Collect coverage
