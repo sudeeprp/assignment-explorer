@@ -13,12 +13,13 @@ on:
         type: choice
         description: Assignment name
         options:
-        - spring
-        - well-named
-        - test-failer
-        - simple-monitor
-        - stream-line
+        - image-encapsulation
         - pass-an-image
+        - stream-line
+        - simple-monitor
+        - test-failer
+        - well-named
+        - spring
       coverage:
         type: boolean
         description: Collect coverage
